@@ -1,0 +1,185 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Numerical_Laplace_Transform_Plotter</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-26"><meta name="DC.source" content="Numerical_Laplace_Transform_Plotter.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Explanation</a></li><li><a href="#4">Making Estimation on the Real Solution</a></li><li><a href="#6">Input the Parameters Needed for Ding Laplace Transform</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Numerical_Laplace_Transform_Plotter
+</pre><pre class="codeinput">syms <span class="string">x</span>;
+syms <span class="string">s</span>;
+</pre><h2 id="3">Explanation</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">Laplace Transform of TF = SolLT(inf)-SolT(0)
+</span><span class="comment">but we cannot use inf to get the result, MATLAB cannot calculate that.
+</span><span class="comment">However, we can type in large n to estimate the real result.
+</span><span class="comment">
+</span><span class="comment">For Example:
+</span><span class="comment">
+</span><span class="comment">figure;
+</span><span class="comment">LapTF = SolLT(10000)-SolLT(0);
+</span><span class="comment">fplot(LapTF, [0,20]);
+</span><span class="comment">title('Simulation');
+</span><span class="comment">
+</span><span class="comment">figure;
+</span><span class="comment">RealLap = laplace(1,x,s);
+</span><span class="comment">fplot(RealLap, [0,20]);
+</span><span class="comment">title('Real');
+</span><span class="comment">%}</span>
+</pre><h2 id="4">Making Estimation on the Real Solution</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">We can type in numerous small n to see how the function changes, in order
+</span><span class="comment">to guess the form of Laplace transform of TF. After making assumption,
+</span><span class="comment">setting n as infinity, we can get the result.
+</span><span class="comment">
+</span><span class="comment">Below is an Example:
+</span><span class="comment">%}
+</span>
+figure;
+<span class="keyword">for</span> k=1:1:10
+    fplot(SolLT(k)-SolLT(0),[0,20]);
+    hold <span class="string">on</span>;
+<span class="keyword">end</span>
+title(<span class="string">'Laplace transform in different n'</span>);
+xlabel(<span class="string">'s'</span>);
+ylabel(<span class="string">'SolLT(k)-SolLT(0)'</span>);
+</pre><img vspace="5" hspace="5" src="Numerical_Laplace_Transform_Plotter_01.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> AnsLT = SolLT(n)
+</pre><h2 id="6">Input the Parameters Needed for Ding Laplace Transform</h2><pre class="codeinput">syms <span class="string">s</span>;
+syms <span class="string">x</span>;
+TF(x) = 1 + 0*x; <span class="comment">%Function that needs to be transformed</span>
+ind = 100; <span class="comment">%For integration accuracy, higher means more accuracy</span>
+IC = 2; <span class="comment">%Initial Value of the integration</span>
+
+<span class="keyword">if</span> n &gt; 0
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind);
+<span class="keyword">else</span>
+    AnsLT = IC;
+<span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function Numerical_Laplace_Transform_Plotter
+
+syms x;
+syms s;
+%% Explanation
+%{
+Laplace Transform of TF = SolLT(inf)-SolT(0)
+but we cannot use inf to get the result, MATLAB cannot calculate that.
+However, we can type in large n to estimate the real result.
+
+For Example: 
+
+figure;
+LapTF = SolLT(10000)-SolLT(0);
+fplot(LapTF, [0,20]);
+title('Simulation');
+
+figure;
+RealLap = laplace(1,x,s);
+fplot(RealLap, [0,20]);
+title('Real');
+%}
+
+%% Making Estimation on the Real Solution
+%{
+We can type in numerous small n to see how the function changes, in order
+to guess the form of Laplace transform of TF. After making assumption,
+setting n as infinity, we can get the result. 
+
+Below is an Example: 
+%}
+
+figure;
+for k=1:1:10
+    fplot(SolLT(k)-SolLT(0),[0,20]);
+    hold on;
+end
+title('Laplace transform in different n');
+xlabel('s');
+ylabel('SolLT(k)-SolLT(0)');
+
+end
+
+function AnsLT = SolLT(n)
+%% Input the Parameters Needed for Ding Laplace Transform
+syms s;
+syms x;
+TF(x) = 1 + 0*x; %Function that needs to be transformed
+ind = 100; %For integration accuracy, higher means more accuracy
+IC = 2; %Initial Value of the integration
+
+if n > 0
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind);
+else
+    AnsLT = IC;
+end
+
+end
+
+
+
+
+##### SOURCE END #####
+--></body></html>

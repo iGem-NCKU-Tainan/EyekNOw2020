@@ -1,0 +1,272 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Double_Laplace_Transform_Demo</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-26"><meta name="DC.source" content="Double_Laplace_Transform_Demo.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Variables Commands</a></li><li><a href="#4">Obtaining Answer</a></li><li><a href="#5">Plot Command with Demo</a></li><li><a href="#7">Target Function</a></li><li><a href="#8">Syntax</a></li><li><a href="#10">Initial Condition</a></li><li><a href="#12">Notice</a></li><li><a href="#14">Boundary Condition</a></li><li><a href="#16">Notice</a></li><li><a href="#18">Operation of double Laplace transform</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Double_Laplace_Transform_Demo
+</pre><pre class="codeinput"><span class="comment">% DOUBLE_LAPLACE_TRANSFORM_DEMO Demonstrating Double Laplace Transform</span>
+<span class="comment">% Laplace Transform:</span>
+<span class="comment">% F(s) = integration(f(x)*e^(-s*x)dx)(from 0 to infinite)</span>
+<span class="comment">% Double Laplace Transform:</span>
+<span class="comment">% F(p,q) =integration((ingegration(f(x,t)*e^(-p*x)dp)(from 0 to infinite))*e^(-q*t))(from 0 to infinite)</span>
+<span class="comment">% Since the integration does not always have a formula result, our program</span>
+<span class="comment">% aims to provide numerical graph of double Laplace transform. This may help</span>
+<span class="comment">% future iGEM teams to find the solutions of PDEs with higher efficiency and</span>
+<span class="comment">% accuracy.</span>
+
+clc;clear;
+</pre><h2 id="3">Variables Commands</h2><pre class="codeinput">syms <span class="string">x</span>;
+syms <span class="string">t</span>;
+syms <span class="string">p</span>;
+syms <span class="string">q</span>;
+</pre><h2 id="4">Obtaining Answer</h2><pre class="codeinput">sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);  <span class="comment">% Delete the ';' if you want to see the final resulte of sol. In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)</span>
+</pre><h2 id="5">Plot Command with Demo</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">Here for typing the plot type you want, such as fplot.
+</span><span class="comment">Note that the function we get by sol cannot directly be surfed, so if you
+</span><span class="comment">want to surf sol, you'll need to rewrite it into the form that surf will
+</span><span class="comment">accept.
+</span><span class="comment">For example: if sol = p*q, then you'll need to write it like:
+</span><span class="comment">r = linspace(0,10,10);
+</span><span class="comment">l = linspace(0,10,10);
+</span><span class="comment">[R,L] = meshgrid(r,l);
+</span><span class="comment">F = P.*Q;
+</span><span class="comment">figure;
+</span><span class="comment">surf (P,Q,F);
+</span><span class="comment">xlabel......
+</span><span class="comment">ylabel......
+</span><span class="comment">title......
+</span><span class="comment">
+</span><span class="comment">Below shows a way using fplot.
+</span><span class="comment">%}
+</span>
+fplot (sol(p,1));
+xlabel(<span class="string">'P'</span>);
+ylabel(<span class="string">'sol'</span>);
+title(<span class="string">'Double Laplace Transform Plot of Target Function at q= 1'</span>);
+</pre><img vspace="5" hspace="5" src="Double_Laplace_Transform_Demo_01.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="7">Target Function</h2><pre class="codeinput"><span class="keyword">function</span> [p1,Lapp2,q1,q2] = TargetFunc(x,t)
+</pre><h2 id="8">Syntax</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">p1*DfDt + p2 + q1*DfDx + q2*f = 0
+</span><span class="comment">In this case, we'll get the PDE below:
+</span><span class="comment">2*DfDt + 2*x + 2*t + 2*DfDx - 5*f = 0
+</span><span class="comment">%}
+</span>syms <span class="string">x</span>;
+syms <span class="string">t</span>;
+syms <span class="string">p</span>;
+syms <span class="string">q</span>;
+p1 = 2;
+p2 = 2*x + 2*t;
+q1 = 2;
+q2 = -5;
+Lapp2 = laplace(laplace(p2,x,p),t,q);
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="10">Initial Condition</h2><pre class="codeinput"><span class="keyword">function</span> [LapIC] = ICFunc(x)
+</pre><pre class="codeinput">syms <span class="string">x</span>;
+syms <span class="string">p</span>;
+IC = 4*x+1;
+LapIC = laplace(IC,x,p);
+</pre><h2 id="12">Notice</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">Sometimes typing laplace(IC,x,p) will get the result as: laplace(IC,x,p).
+</span><span class="comment">It means that IC is not convertable in MATLAB. In this case, we cannot get
+</span><span class="comment">the formula form of Target Function. The only way is to look for numerical
+</span><span class="comment">solution. Take a look at Numerical_Laplace_Transform_Plotter.m, You can
+</span><span class="comment">type in the numerical results of laplce(IC) by using
+</span><span class="comment">Numerical_Laplace_Transform_Plotter.m, and continue to run this script.
+</span><span class="comment">%}</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="14">Boundary Condition</h2><pre class="codeinput"><span class="keyword">function</span> [LapBC] = BCFunc(t)
+</pre><pre class="codeinput">syms <span class="string">t</span>;
+syms <span class="string">q</span>;
+BC = -3*t;
+LapBC = laplace(BC,t,q);
+</pre><h2 id="16">Notice</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">Same as mentioned in LaplIC.
+</span><span class="comment">%}</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="18">Operation of double Laplace transform</h2><pre class="codeinput"><span class="keyword">function</span> DLTANS = DLT(ps,LapIC,LapBC,x,t)
+syms <span class="string">x</span>;
+syms <span class="string">t</span>;
+syms <span class="string">p</span>;
+syms <span class="string">q</span>;
+p1 = ps(1);
+p2 = ps(2);
+q1 = ps(3);
+q2 = ps(4);
+DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2);
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function Double_Laplace_Transform_Demo
+% DOUBLE_LAPLACE_TRANSFORM_DEMO Demonstrating Double Laplace Transform
+% Laplace Transform: 
+% F(s) = integration(f(x)*e^(-s*x)dx)(from 0 to infinite)
+% Double Laplace Transform: 
+% F(p,q) =integration((ingegration(f(x,t)*e^(-p*x)dp)(from 0 to infinite))*e^(-q*t))(from 0 to infinite)
+% Since the integration does not always have a formula result, our program
+% aims to provide numerical graph of double Laplace transform. This may help
+% future iGEM teams to find the solutions of PDEs with higher efficiency and
+% accuracy. 
+
+clc;clear;
+%% Variables Commands
+syms x;
+syms t;
+syms p;
+syms q;
+
+%% Obtaining Answer
+sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);  % Delete the ';' if you want to see the final resulte of sol. In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)
+%% Plot Command with Demo
+%{
+Here for typing the plot type you want, such as fplot.
+Note that the function we get by sol cannot directly be surfed, so if you
+want to surf sol, you'll need to rewrite it into the form that surf will
+accept. 
+For example: if sol = p*q, then you'll need to write it like: 
+r = linspace(0,10,10);
+l = linspace(0,10,10);
+[R,L] = meshgrid(r,l);
+F = P.*Q;
+figure;
+surf (P,Q,F);
+xlabel......
+ylabel......
+title......
+
+Below shows a way using fplot.
+%}
+
+fplot (sol(p,1));
+xlabel('P');
+ylabel('sol');
+title('Double Laplace Transform Plot of Target Function at q= 1');
+end
+
+%% Target Function
+function [p1,Lapp2,q1,q2] = TargetFunc(x,t)
+%% Syntax
+%{
+p1*DfDt + p2 + q1*DfDx + q2*f = 0
+In this case, we'll get the PDE below:
+2*DfDt + 2*x + 2*t + 2*DfDx - 5*f = 0
+%}
+syms x;
+syms t;
+syms p;
+syms q;
+p1 = 2;
+p2 = 2*x + 2*t;
+q1 = 2;
+q2 = -5;
+Lapp2 = laplace(laplace(p2,x,p),t,q);
+end
+
+%% Initial Condition
+function [LapIC] = ICFunc(x)
+syms x;
+syms p;
+IC = 4*x+1;
+LapIC = laplace(IC,x,p);
+%% Notice
+%{
+Sometimes typing laplace(IC,x,p) will get the result as: laplace(IC,x,p).
+It means that IC is not convertable in MATLAB. In this case, we cannot get
+the formula form of Target Function. The only way is to look for numerical
+solution. Take a look at Numerical_Laplace_Transform_Plotter.m, You can
+type in the numerical results of laplce(IC) by using
+Numerical_Laplace_Transform_Plotter.m, and continue to run this script.
+%}
+end
+
+%% Boundary Condition
+function [LapBC] = BCFunc(t)
+syms t;
+syms q;
+BC = -3*t;
+LapBC = laplace(BC,t,q);
+%% Notice
+%{
+Same as mentioned in LaplIC. 
+%}
+end
+
+%% Operation of double Laplace transform
+function DLTANS = DLT(ps,LapIC,LapBC,x,t)
+syms x;
+syms t;
+syms p;
+syms q;
+p1 = ps(1);
+p2 = ps(2);
+q1 = ps(3);
+q2 = ps(4);
+DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2);
+end
+
+
+
+##### SOURCE END #####
+--></body></html>
