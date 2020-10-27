@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Numerical_Laplace_Transform_Plotter</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-26"><meta name="DC.source" content="Numerical_Laplace_Transform_Plotter.m"><style type="text/css">
+      --><title>Numerical_Laplace_Transform_Estimator</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-10-28"><meta name="DC.source" content="Numerical_Laplace_Transform_Estimator.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,27 +66,46 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Explanation</a></li><li><a href="#4">Making Estimation on the Real Solution</a></li><li><a href="#6">Input the Parameters Needed for Ding Laplace Transform</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Numerical_Laplace_Transform_Plotter
-</pre><pre class="codeinput">syms <span class="string">x</span>;
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Explanation</a></li><li><a href="#4">Making Estimation on the Real Solution</a></li><li><a href="#6">Input the Parameters Needed for Laplace Transform</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Numerical_Laplace_Transform_Estimator
+</pre><pre class="codeinput"><span class="comment">% NUMERICAL_LAPLACE_TRANSFORM_ESTIMATOR helps users to obtain approximation</span>
+<span class="comment">% of Laplace transform of target functions, which are not transformable in</span>
+<span class="comment">% current system.</span>
+syms <span class="string">x</span>;
 syms <span class="string">s</span>;
 </pre><h2 id="3">Explanation</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">This code aims to deal with functions that cannot be transformed by
+</span><span class="comment">built-in Laplace transform function. This program cannot provide the real
+</span><span class="comment">solution, but we provide numerical solutions for users to deduce the real
+</span><span class="comment">solution with higher efficiency and accuracy. Even if the solution is hard
+</span><span class="comment">to be deduced, the numerical solution also provide acceptable
+</span><span class="comment">approximation.
+</span><span class="comment">
 </span><span class="comment">Laplace Transform of TF = SolLT(inf)-SolT(0)
 </span><span class="comment">but we cannot use inf to get the result, MATLAB cannot calculate that.
 </span><span class="comment">However, we can type in large n to estimate the real result.
 </span><span class="comment">
+</span><span class="comment">In this case, we use n = 2000 to make approximation. If you want to
+</span><span class="comment">increase the accuracy, use larger "ind" in @AnsLT, or use larger n.
+</span><span class="comment">
 </span><span class="comment">For Example:
-</span><span class="comment">
-</span><span class="comment">figure;
-</span><span class="comment">LapTF = SolLT(10000)-SolLT(0);
-</span><span class="comment">fplot(LapTF, [0,20]);
-</span><span class="comment">title('Simulation');
-</span><span class="comment">
-</span><span class="comment">figure;
-</span><span class="comment">RealLap = laplace(1,x,s);
-</span><span class="comment">fplot(RealLap, [0,20]);
-</span><span class="comment">title('Real');
-</span><span class="comment">%}</span>
-</pre><h2 id="4">Making Estimation on the Real Solution</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">%}
+</span>
+figure;
+LapTF = SolLT(2000)-SolLT(0);
+fplot(LapTF, [0,20]);
+title(<span class="string">'Estimation of Laplace Transform of Target Function n=2000'</span>);
+xlabel(<span class="string">'s'</span>);
+ylabel(<span class="string">'Estimator'</span>);
+
+figure;
+RealLap = laplace(1,x,s);
+fplot(RealLap, [0,20]);
+xlim([0,20]);
+ylim([0,20])
+title(<span class="string">'Real Laplace Transform of Target Function'</span>);
+xlabel(<span class="string">'s'</span>);
+ylabel(<span class="string">'Real Solution'</span>);
+</pre><img vspace="5" hspace="5" src="Numerical_Laplace_Transform_Estimator_01.png" alt=""> <img vspace="5" hspace="5" src="Numerical_Laplace_Transform_Estimator_02.png" alt=""> <h2 id="4">Making Estimation on the Real Solution</h2><pre class="codeinput"><span class="comment">%{
 </span><span class="comment">We can type in numerous small n to see how the function changes, in order
 </span><span class="comment">to guess the form of Laplace transform of TF. After making assumption,
 </span><span class="comment">setting n as infinity, we can get the result.
@@ -101,46 +120,64 @@ figure;
 <span class="keyword">end</span>
 title(<span class="string">'Laplace transform in different n'</span>);
 xlabel(<span class="string">'s'</span>);
-ylabel(<span class="string">'SolLT(k)-SolLT(0)'</span>);
-</pre><img vspace="5" hspace="5" src="Numerical_Laplace_Transform_Plotter_01.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+ylabel(<span class="string">'SolLT(n)-SolLT(0)'</span>);
+</pre><img vspace="5" hspace="5" src="Numerical_Laplace_Transform_Estimator_03.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
 
 <span class="keyword">function</span> AnsLT = SolLT(n)
-</pre><h2 id="6">Input the Parameters Needed for Ding Laplace Transform</h2><pre class="codeinput">syms <span class="string">s</span>;
+</pre><h2 id="6">Input the Parameters Needed for Laplace Transform</h2><pre class="codeinput">syms <span class="string">s</span>;
 syms <span class="string">x</span>;
 TF(x) = 1 + 0*x; <span class="comment">%Function that needs to be transformed</span>
-ind = 100; <span class="comment">%For integration accuracy, higher means more accuracy</span>
+ind = 100; <span class="comment">%For integration accuracy, higher leads to more accuracy</span>
 IC = 2; <span class="comment">%Initial Value of the integration</span>
 
 <span class="keyword">if</span> n &gt; 0
-    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind);
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind); <span class="comment">%Do not change this line</span>
 <span class="keyword">else</span>
-    AnsLT = IC;
+    AnsLT = IC; <span class="comment">%Do not change this line</span>
 <span class="keyword">end</span>
 </pre><pre class="codeinput"><span class="keyword">end</span>
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
-function Numerical_Laplace_Transform_Plotter
-
+function Numerical_Laplace_Transform_Estimator
+% NUMERICAL_LAPLACE_TRANSFORM_ESTIMATOR helps users to obtain approximation
+% of Laplace transform of target functions, which are not transformable in
+% current system.
 syms x;
 syms s;
 %% Explanation
 %{
+This code aims to deal with functions that cannot be transformed by
+built-in Laplace transform function. This program cannot provide the real
+solution, but we provide numerical solutions for users to deduce the real
+solution with higher efficiency and accuracy. Even if the solution is hard
+to be deduced, the numerical solution also provide acceptable
+approximation. 
+
 Laplace Transform of TF = SolLT(inf)-SolT(0)
 but we cannot use inf to get the result, MATLAB cannot calculate that.
 However, we can type in large n to estimate the real result.
 
+In this case, we use n = 2000 to make approximation. If you want to
+increase the accuracy, use larger "ind" in @AnsLT, or use larger n.
+
 For Example: 
+%}
 
 figure;
-LapTF = SolLT(10000)-SolLT(0);
+LapTF = SolLT(2000)-SolLT(0);
 fplot(LapTF, [0,20]);
-title('Simulation');
+title('Estimation of Laplace Transform of Target Function n=2000');
+xlabel('s');
+ylabel('Estimator');
 
 figure;
 RealLap = laplace(1,x,s);
 fplot(RealLap, [0,20]);
-title('Real');
-%}
+xlim([0,20]);
+ylim([0,20])
+title('Real Laplace Transform of Target Function');
+xlabel('s');
+ylabel('Real Solution');
 
 %% Making Estimation on the Real Solution
 %{
@@ -158,22 +195,22 @@ for k=1:1:10
 end
 title('Laplace transform in different n');
 xlabel('s');
-ylabel('SolLT(k)-SolLT(0)');
+ylabel('SolLT(n)-SolLT(0)');
 
 end
 
 function AnsLT = SolLT(n)
-%% Input the Parameters Needed for Ding Laplace Transform
+%% Input the Parameters Needed for Laplace Transform
 syms s;
 syms x;
 TF(x) = 1 + 0*x; %Function that needs to be transformed
-ind = 100; %For integration accuracy, higher means more accuracy
+ind = 100; %For integration accuracy, higher leads to more accuracy
 IC = 2; %Initial Value of the integration
 
 if n > 0
-    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind);
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind); %Do not change this line
 else
-    AnsLT = IC;
+    AnsLT = IC; %Do not change this line
 end
 
 end
