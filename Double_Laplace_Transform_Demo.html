@@ -71,16 +71,21 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 <span class="comment">% Laplace Transform:</span>
 <span class="comment">% F(s) = integration(f(x)*e^(-s*x)dx)(from 0 to infinite)</span>
 <span class="comment">% Double Laplace Transform:</span>
-<span class="comment">% F(p,q) =integration((ingegration(f(x,t)*e^(-p*x)dp)(from 0 to infinite))*e^(-q*t))(from 0 to infinite)</span>
-<span class="comment">% Our program aims to provide a PDE solver utilizes double Laplace transform. This may help future</span>
-<span class="comment">% iGEM teams to find the solutions of PDEs with higher efficiency and accuracy.</span>
+<span class="comment">% F(p,q) = laplace(laplace(f,x,p),t,q);</span>
+<span class="comment">% Our program aims to provide a PDE solver utilizes double Laplace</span>
+<span class="comment">% transform. This may help future iGEM teams to find the solutions of PDEs</span>
+<span class="comment">% higher efficiency and accuracy.</span>
 
 clc;clear;
 </pre><h2 id="3">Variables Commands</h2><pre class="codeinput">syms <span class="string">x</span>;
 syms <span class="string">t</span>;
 syms <span class="string">p</span>;
 syms <span class="string">q</span>;
-</pre><h2 id="4">Obtaining Answer</h2><pre class="codeinput">sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);  <span class="comment">% Delete the ';' if you want to see the final resulte of sol. In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)</span>
+</pre><h2 id="4">Obtaining Answer</h2><pre class="codeinput"><span class="comment">%{
+</span><span class="comment">Delete the ';' if you want to see the final resulte of sol.
+</span><span class="comment">In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)
+</span><span class="comment">%}
+</span>sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);
 </pre><h2 id="5">Plot Command with Demo</h2><pre class="codeinput"><span class="comment">%{
 </span><span class="comment">Here for typing the plot type you want, such as fplot, fsurf.
 </span><span class="comment">%}
@@ -149,7 +154,7 @@ p1 = ps(1);
 p2 = ps(2);
 q1 = ps(3);
 q2 = ps(4);
-DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2); <span class="comment">% Do not change this line, this is for solving PDEs!</span>
+DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2);
 <span class="keyword">end</span>
 </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -158,9 +163,10 @@ function Double_Laplace_Transform_Demo
 % Laplace Transform: 
 % F(s) = integration(f(x)*e^(-s*x)dx)(from 0 to infinite)
 % Double Laplace Transform: 
-% F(p,q) =integration((ingegration(f(x,t)*e^(-p*x)dp)(from 0 to infinite))*e^(-q*t))(from 0 to infinite)
-% Our program aims to provide a PDE solver utilizes double Laplace transform. This may help future 
-% iGEM teams to find the solutions of PDEs with higher efficiency and accuracy. 
+% F(p,q) = laplace(laplace(f,x,p),t,q);
+% Our program aims to provide a PDE solver utilizes double Laplace 
+% transform. This may help future iGEM teams to find the solutions of PDEs 
+% higher efficiency and accuracy. 
 
 clc;clear;
 %% Variables Commands
@@ -170,7 +176,11 @@ syms p;
 syms q;
 
 %% Obtaining Answer
-sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);  % Delete the ';' if you want to see the final resulte of sol. In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)
+%{
+Delete the ';' if you want to see the final resulte of sol. 
+In this case, sol = -(6/q^2 - (8*(p/4 + 1))/p^2 + 2)/(2*p + 2*q + 2)
+%}
+sol(p,q) = DLT(@TargetFunc,@ICFunc,@BCFunc,x,t);  
 %% Plot Command with Demo
 %{
 Here for typing the plot type you want, such as fplot, fsurf.
@@ -254,7 +264,7 @@ p1 = ps(1);
 p2 = ps(2);
 q1 = ps(3);
 q2 = ps(4);
-DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2); % Do not change this line, this is for solving PDEs!
+DLTANS = ((p1)*(LapIC(p)) + (q1)*(LapBC(q)) - p2)/((p1)*q + (q1)*p + q2);
 end
 
 

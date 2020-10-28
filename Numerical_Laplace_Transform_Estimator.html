@@ -131,7 +131,7 @@ ind = 100; <span class="comment">%For integration accuracy, higher leads to more
 IC = 2; <span class="comment">%Initial Value of the integration</span>
 
 <span class="keyword">if</span> n &gt; 0
-    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind); <span class="comment">%Do not change this line</span>
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind);
 <span class="keyword">else</span>
     AnsLT = IC; <span class="comment">%Do not change this line</span>
 <span class="keyword">end</span>
@@ -208,7 +208,7 @@ ind = 100; %For integration accuracy, higher leads to more accuracy
 IC = 2; %Initial Value of the integration
 
 if n > 0
-    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind); %Do not change this line
+    AnsLT = SolLT(n-1) + (TF(n/ind))*exp(-(n/ind)*s)*(1/ind); 
 else
     AnsLT = IC; %Do not change this line
 end
