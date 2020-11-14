@@ -1,0 +1,157 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Inverse_Laplace_Estimator</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-11-14"><meta name="DC.source" content="Inverse_Laplace_Estimator.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Introduction to use of FFT and IFFT</a></li><li><a href="#4">Variables that will be used</a></li><li><a href="#5">Index that will be used</a></li><li><a href="#6">Function that needs to be transformed</a></li><li><a href="#7">Estimation</a></li><li><a href="#8">Plot out the estimation and solution</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> Inverse_Laplace_Estimator
+</pre><pre class="codeinput"><span class="comment">%INVERSE_LAPLACE_ESTIMATOR provides a close approximation of functions that</span>
+<span class="comment">%cannot be transformed by inverse Laplave transform function built in</span>
+<span class="comment">%MATLAB. We utilize inverse fast fourier transform to realize our aims.</span>
+<span class="comment">%Below are codes demonstrating the method.</span>
+</pre><h2 id="3">Introduction to use of FFT and IFFT</h2><pre class="codeinput"><span class="comment">%Just as code listed below;</span>
+<span class="comment">%x = [1,2,3,4,5];</span>
+<span class="comment">%sol = fft(x);</span>
+<span class="comment">%ifft(sol);</span>
+</pre><h2 id="4">Variables that will be used</h2><pre class="codeinput">syms <span class="string">s</span>;
+</pre><h2 id="5">Index that will be used</h2><pre class="codeinput"><span class="comment">%Description: when t is larger, the estimation will be more closer to real</span>
+<span class="comment">%answer.</span>
+t = 2000;
+</pre><h2 id="6">Function that needs to be transformed</h2><pre class="codeinput">F(s) = 1/(s+0.003);
+</pre><h2 id="7">Estimation</h2><pre class="codeinput">container = zeros(1,t);
+<span class="keyword">for</span> k = 1:1:t
+    container(k) = F(2*pi*1i*(k-1)/t);
+<span class="keyword">end</span>
+sol = ifft(container,<span class="string">'Symmetric'</span>);
+</pre><h2 id="8">Plot out the estimation and solution</h2><pre class="codeinput"><span class="comment">%For estimation</span>
+figure;
+h = animatedline(<span class="string">'color'</span>,<span class="string">'r'</span>,<span class="string">'linewidth'</span>,1.5);
+<span class="keyword">for</span> j = 1:1:t
+    addpoints(h,(j-1),sol(j));
+<span class="keyword">end</span>
+hold <span class="string">on</span>;
+
+<span class="comment">%For real</span>
+syms <span class="string">x</span>;
+realsol = ilaplace(F,s,x);
+fplot(realsol,[0,t]);
+legend(<span class="string">'estimation'</span>,<span class="string">'real'</span>);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'f(x)'</span>);
+title(<span class="string">'Estimation and solution of f(x)'</span>);
+hold <span class="string">off</span>;
+</pre><img vspace="5" hspace="5" src="Inverse_Laplace_Estimator_01.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function Inverse_Laplace_Estimator
+%INVERSE_LAPLACE_ESTIMATOR provides a close approximation of functions that
+%cannot be transformed by inverse Laplave transform function built in
+%MATLAB. We utilize inverse fast fourier transform to realize our aims.
+%Below are codes demonstrating the method.
+
+%% Introduction to use of FFT and IFFT
+%Just as code listed below;
+%x = [1,2,3,4,5];
+%sol = fft(x);
+%ifft(sol);
+
+%% Variables that will be used
+syms s;
+
+%% Index that will be used
+%Description: when t is larger, the estimation will be more closer to real
+%answer. 
+t = 2000;
+
+%% Function that needs to be transformed
+F(s) = 1/(s+0.003);
+
+%% Estimation
+container = zeros(1,t);
+for k = 1:1:t
+    container(k) = F(2*pi*1i*(k-1)/t);
+end
+sol = ifft(container,'Symmetric');
+
+%% Plot out the estimation and solution
+%For estimation
+figure;
+h = animatedline('color','r','linewidth',1.5);
+for j = 1:1:t
+    addpoints(h,(j-1),sol(j));
+end
+hold on;
+
+%For real
+syms x;
+realsol = ilaplace(F,s,x);
+fplot(realsol,[0,t]);
+legend('estimation','real');
+xlabel('x');
+ylabel('f(x)');
+title('Estimation and solution of f(x)');
+hold off;
+
+##### SOURCE END #####
+--></body></html>
